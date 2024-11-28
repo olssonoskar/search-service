@@ -19,7 +19,7 @@ public class SearchEngines {
         engines = List.of(googleSearch, bingSearch);
     }
 
-    public List<SearchEngine> engines() {
+    public List<SearchEngine> getEngines() {
         return engines;
     }
 

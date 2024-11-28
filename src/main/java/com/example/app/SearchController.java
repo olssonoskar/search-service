@@ -3,6 +3,7 @@ package com.example.app;
 import com.example.app.responses.SearchResult;
 import com.example.app.responses.Summary;
 import com.example.app.searchengines.SearchEngine;
+import com.example.app.searchengines.SearchEngines;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +16,14 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-public class SearchService {
+public class SearchController {
 
-    private final Logger log = LoggerFactory.getLogger(SearchService.class);
+    private final Logger log = LoggerFactory.getLogger(SearchController.class);
     private final List<SearchEngine> engines;
 
     @Autowired
-    public SearchService(List<SearchEngine> engines) {
-        this.engines = engines;
+    public SearchController(SearchEngines engines) {
+        this.engines = engines.getEngines();
     }
 
     @GetMapping("/search")
@@ -30,9 +31,10 @@ public class SearchService {
         if (q.isBlank()) {
             return new Summary(0, Collections.emptyList());
         }
-        log.info("Processing search request for: {} ...", q);
+        var queryWords = toWords(q);
+        log.info("Processing search request for: {} ...", queryWords);
         var searchResults = engines.stream()
-                .map(engine -> engine.searchResults(words(q)))
+                .map(engine -> engine.searchResults(queryWords))
                 .toList();
 
         log.debug("Finished");
@@ -46,9 +48,10 @@ public class SearchService {
                 .orElse(0L);
     }
 
-    private List<String> words(String query) {
+    private List<String> toWords(String query) {
         return Arrays.stream(query.trim().split(" "))
                 .filter(word -> !word.isBlank())
+                .distinct()
                 .toList();
     }
 
