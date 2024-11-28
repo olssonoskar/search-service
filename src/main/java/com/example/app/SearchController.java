@@ -15,6 +15,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Controller handling the GET request for /search
+ * Provides some input sanitation such as removing duplicates elements and spaces
+ * Splits the query into words and calls the search for each engine
+ */
 @RestController
 public class SearchController {
 
@@ -34,14 +39,13 @@ public class SearchController {
         var queryWords = toWords(q);
         log.info("Processing search request for: {} ...", queryWords);
         var searchResults = engines.stream()
-                .map(engine -> engine.searchResults(queryWords))
+                .map(engine -> engine.search(queryWords))
                 .toList();
-
         log.debug("Finished");
-        return new Summary(sumHits(searchResults), searchResults);
+        return new Summary(summarizeHits(searchResults), searchResults);
     }
 
-    private Long sumHits(List<SearchResult> res) {
+    private Long summarizeHits(List<SearchResult> res) {
         return res.stream()
                 .map(SearchResult::hits)
                 .reduce(Long::sum)

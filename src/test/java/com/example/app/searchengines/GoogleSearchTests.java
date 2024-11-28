@@ -21,7 +21,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
 class GoogleSearchTests {
 
     private final WebClient.ResponseSpec responseSpec = Mockito.mock(WebClient.ResponseSpec.class);
@@ -44,14 +43,13 @@ class GoogleSearchTests {
 
     @Test
     void searchTest() {
-
         when(client.getWithQueryParams(anyString(), anyMap())).thenReturn(responseSpec);
         when(responseSpec.bodyToMono(GoogleResponse.class))
                 .thenReturn(Mono.just(response("100")))
                 .thenReturn(Mono.just(response("1000")));
 
         var query = List.of("test", "test2");
-        var result = googleSearch.searchResults(query);
+        var result = googleSearch.search(query);
 
         verify(client, times(2)).getWithQueryParams(anyString(), anyMap());
         assertEquals(new SearchResult("Google", 1100L), result);
@@ -59,12 +57,11 @@ class GoogleSearchTests {
 
     @Test
     void searchFailureTest() {
-
         when(client.getWithQueryParams(anyString(), anyMap())).thenReturn(responseSpec);
         when(responseSpec.bodyToMono(GoogleResponse.class)).thenReturn(Mono.error(new RuntimeException("Response failed")));
 
         var query = List.of("ops");
-        var result = googleSearch.searchResults(query);
+        var result = googleSearch.search(query);
 
         verify(client, times(1)).getWithQueryParams(anyString(), anyMap());
         assertEquals(new SearchResult("Google", 0L), result);
@@ -72,12 +69,11 @@ class GoogleSearchTests {
 
     @Test
     void handleParseFailureTest() {
-
         when(client.getWithQueryParams(anyString(), anyMap())).thenReturn(responseSpec);
         when(responseSpec.bodyToMono(GoogleResponse.class)).thenReturn(Mono.just(response("NaN")));
 
         var query = List.of("ops");
-        var result = googleSearch.searchResults(query);
+        var result = googleSearch.search(query);
 
         verify(client, times(1)).getWithQueryParams(anyString(), anyMap());
         assertEquals(new SearchResult("Google", 0L), result);

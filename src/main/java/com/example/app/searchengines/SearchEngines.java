@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Bean containing the supported search engines
- * Enables us to add new engines in the current flow
+ * Enables the addition of new engines into the current flow
  */
 @Component
 public class SearchEngines {

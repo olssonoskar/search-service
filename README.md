@@ -5,8 +5,8 @@ A simple API to get a sum of matches from different search engines for a provide
 ## Running the application
 
 The application is intended to either be run directly from IntelliJ or in a terminal. 
-For running in a terminal, running mvn verify to produce a JAR should be enough and then 
-simply starting it vit java -jar. 
+For running in a terminal, running mvn verify to produce a JAR should be enough to then 
+starting it with java -jar <jar>. 
 
 The application requires API keys for Google and Bing, which need to be provided in application.yaml.
 
@@ -20,10 +20,10 @@ Querying can be done either via a browser or tool like curl, example below where
 The application has a single GET endpoint at /search that takes a query
 param for the String that contains a set of words separated by a single space.
 
-The words are split into a list and each words are passed to the integrated
-search engines for individual querying. Currently the following search engines are integrated:
+The words are split into a list and each word are passed to the integrated
+search engines for individual querying. Currently, the following search engines are integrated:
  - Google (Tested with Free tier: Limited to 100 queries per day)
- - Bing (Tested with Free tier: Limitied to 3 req/s, up to 1k per day)
+ - Bing (Tested with Free tier: Limited to 3 req/s, up to 1k per day)
 
 Assumption: Due to the rate limiting of Bing, queries with more words seems to take a bit longer to finish.
 I have tested with a length of 6 words, I assume a very long query would lead to timeout failures.
@@ -42,8 +42,7 @@ is reactive using Project Reactors model (from Spring WebFlux), which is the rea
     .bodyToMono(BingResponse.class)
     .onErrorResume(e -> {
         ...
-    })
-    .blockOptional();
+    }).blockOptional();
 
 Mono here is a Reactive Publisher that emits 0-1 value or an error signal, which fits since we expect a single 
 response to our request. The response body (JSON) will be converted to an instance of the provided class.

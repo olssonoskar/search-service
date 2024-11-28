@@ -5,6 +5,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Map;
 
+/**
+ * WebClient prepared for calling search APIs
+ */
 @Component
 public class HttpClient {
 

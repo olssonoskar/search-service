@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class AppApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void contextLoads() { // Default spring test to ensure application starts
 	}
 
 }

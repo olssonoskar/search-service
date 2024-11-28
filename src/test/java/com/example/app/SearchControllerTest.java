@@ -26,8 +26,8 @@ class SearchControllerTest {
     void testValidResponse() {
         var googleRes = new SearchResult("Google", 10L);
         var bingRes = new SearchResult("Bing", 20L);
-        when(googleSearch.searchResults(anyList())).thenReturn(googleRes);
-        when(bingSearch.searchResults(anyList())).thenReturn(bingRes);
+        when(googleSearch.search(anyList())).thenReturn(googleRes);
+        when(bingSearch.search(anyList())).thenReturn(bingRes);
 
         var result = searchController.search("query");
 
@@ -46,8 +46,8 @@ class SearchControllerTest {
         var googleRes = new SearchResult("Google", 1L);
         var bingRes = new SearchResult("Bing", 1L);
         var expectedQuery = List.of("@asd", "--ds", "zax");
-        when(googleSearch.searchResults(expectedQuery)).thenReturn(googleRes);
-        when(bingSearch.searchResults(expectedQuery)).thenReturn(bingRes);
+        when(googleSearch.search(expectedQuery)).thenReturn(googleRes);
+        when(bingSearch.search(expectedQuery)).thenReturn(bingRes);
 
         var result = searchController.search("  @asd --ds     zax    ");
 
@@ -59,8 +59,8 @@ class SearchControllerTest {
         var googleRes = new SearchResult("Google", 1L);
         var bingRes = new SearchResult("Bing", 1L);
         var expectedQuery = List.of("duplicate");
-        when(googleSearch.searchResults(expectedQuery)).thenReturn(googleRes);
-        when(bingSearch.searchResults(expectedQuery)).thenReturn(bingRes);
+        when(googleSearch.search(expectedQuery)).thenReturn(googleRes);
+        when(bingSearch.search(expectedQuery)).thenReturn(bingRes);
 
         var result = searchController.search("duplicate duplicate duplicate");
 

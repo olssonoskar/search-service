@@ -13,23 +13,28 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation for Bing search
+ * Takes a list of words and sends a search request for each one
+ * Converts JSON response to data class and extracts the 'hits' returned as a sum
+ */
 @Component
-public class BingSearch implements SearchEngine{
+public class BingSearch implements SearchEngine {
 
     private final Logger log = LoggerFactory.getLogger(BingSearch.class);
+    private static final String KEY_HEADER = "Ocp-Apim-Subscription-Key";
+
     private final BingConfig config;
     private final HttpClient client;
 
-    private static final String KEY_HEADER = "Ocp-Apim-Subscription-Key";
-
     @Autowired
-    public BingSearch(BingConfig bingConfig, HttpClient client){
+    public BingSearch(BingConfig bingConfig, HttpClient client) {
         this.config = bingConfig;
         this.client = client;
     }
 
     @Override
-    public SearchResult searchResults(List<String> words) {
+    public SearchResult search(List<String> words) {
         var hits = words.parallelStream()
                 .map(this::searchEach)
                 .map(res -> res.map(it -> it.webPages().totalEstimatedMatches()).orElse(0L))
@@ -44,7 +49,6 @@ public class BingSearch implements SearchEngine{
                 .onErrorResume(e -> {
                     log.error("Failed to query Bing: {}", e.getMessage());
                     return Mono.empty();
-                })
-                .blockOptional();
+                }).blockOptional();
     }
 }

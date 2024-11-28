@@ -23,12 +23,12 @@ public class GoogleConfig {
         return cx;
     }
 
-    public String getKey() {
-        return key;
-    }
-
     public void setCx(String cx) {
         this.cx = cx;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public void setKey(String key) {

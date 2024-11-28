@@ -51,7 +51,7 @@ class BingSearchTests {
                 .thenReturn(Mono.just(response2));
 
         var query = List.of("test", "test2");
-        var result = bingSearch.searchResults(query);
+        var result = bingSearch.search(query);
 
         verify(client, times(2)).getWithHeader(anyString(), anyString(), anyString(), anyString());
         assertEquals(new SearchResult("Bing", 150L), result);
@@ -63,7 +63,7 @@ class BingSearchTests {
         when(responseSpec.bodyToMono(BingResponse.class)).thenReturn(Mono.error(new RuntimeException("Response failed")));
 
         var query = List.of("ops");
-        var result = bingSearch.searchResults(query);
+        var result = bingSearch.search(query);
 
         verify(client, times(1)).getWithHeader(anyString(), anyString(), anyString(), anyString());
         assertEquals(new SearchResult("Bing", 0L), result);
