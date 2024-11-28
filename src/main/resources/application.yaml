@@ -1,0 +1,8 @@
+google:
+  path: https://www.googleapis.com/customsearch/v1
+  key: <API_KEY>
+  cx: <CX_VALUE>
+
+bing:
+  path: https://api.bing.microsoft.com/v7.0/search
+  key: <API_KEY>
