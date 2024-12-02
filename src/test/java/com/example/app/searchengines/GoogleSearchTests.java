@@ -4,8 +4,6 @@ import com.example.app.HttpClient;
 import com.example.app.config.GoogleConfig;
 import com.example.app.responses.SearchResult;
 import com.example.app.responses.google.GoogleResponse;
-import com.example.app.responses.google.SearchInformation;
-import com.example.app.responses.google.Url;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,6 +12,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+import static com.example.app.ResponseUtils.googleResponse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -45,8 +44,8 @@ class GoogleSearchTests {
     void searchTest() {
         when(client.getWithQueryParams(anyString(), anyMap())).thenReturn(responseSpec);
         when(responseSpec.bodyToMono(GoogleResponse.class))
-                .thenReturn(Mono.just(response("100")))
-                .thenReturn(Mono.just(response("1000")));
+                .thenReturn(googleResponse("100"))
+                .thenReturn(googleResponse("1000"));
 
         var query = List.of("test", "test2");
         var result = googleSearch.search(query);
@@ -70,17 +69,12 @@ class GoogleSearchTests {
     @Test
     void handleParseFailureTest() {
         when(client.getWithQueryParams(anyString(), anyMap())).thenReturn(responseSpec);
-        when(responseSpec.bodyToMono(GoogleResponse.class)).thenReturn(Mono.just(response("NaN")));
+        when(responseSpec.bodyToMono(GoogleResponse.class)).thenReturn(googleResponse("NaN"));
 
         var query = List.of("ops");
         var result = googleSearch.search(query);
 
         verify(client, times(1)).getWithQueryParams(anyString(), anyMap());
         assertEquals(new SearchResult("Google", 0L), result);
-    }
-
-    private GoogleResponse response(String results) {
-        return new GoogleResponse("search", new Url("url", "any"),
-                new SearchInformation(0, "0", results, ""));
     }
 }
