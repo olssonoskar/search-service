@@ -21,6 +21,9 @@ Querying can be done either via a browser or tool like curl, example below where
     curl '127.0.0.1:8080/search?q=ystad%20simrishamn'
     {"totalHits":14922000,"searchResults":[{"name":"Bing","hits":342000},{"name":"Google","hits":14580000}]}
 
+The app was developed and tested with java 23 but I have tested and 21 works as well.
+Setting java version in pom.xml to 21 should be enough to use it if preferable.
+
 ## Logical flow
 
 The application has a single GET endpoint at /search that takes a query

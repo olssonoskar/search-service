@@ -6,3 +6,6 @@ google:
 bing:
   path: https://api.bing.microsoft.com/v7.0/search
   key: <API-KEY>
+
+# Enable Spring to use virtual threads
+spring.threads.virtual.enabled: true
